@@ -19,13 +19,13 @@ This inline test will first create some **bold** text and then some *slightly sl
 \n\
 ###### Single image test\n\
 \n\
-![this is an image](/home/johan/IMG20210521082058.jpg)\n\
+![this is an image](IMG20210521082058.jpg)\n\
 \n\
 ###### Multiple image test\n\
 \n\
 Only shown side-by-side if it fits in the window\n\
-![this is an image](/home/johan/IMG20210521082058.jpg)\
-![this is an image](/home/johan/IMG20210521082058.jpg)\n\
+![this is an image](IMG20210521082058.jpg)\
+![this is an image](IMG20210521082058.jpg)\n\
 \n\
 test\n\
 #### Multiple titles after another\n\
@@ -43,7 +43,7 @@ activate (GtkApplication *app,
   GtkWidget *md_view = NULL;
   GtkWidget *scrolled_window = NULL;
 
-  md_view = gtk_md_view_new (example_input);
+  md_view = gtk_md_view_new (example_input, "/home/johan/");
 
   scrolled_window = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window),

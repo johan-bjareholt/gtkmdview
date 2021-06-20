@@ -17,6 +17,8 @@ md2gtktextbuf = shared_library(
   soversion: meson.project_version(),
 )
 
+install_headers(['md2gtktextbuf.h', 'gtkmdview.h'])
+
 pkg.generate(libraries: [md2gtktextbuf] + md2gtktextbuf_deps,
              version: meson.project_version(),
              name: 'md2gtktextbuf',

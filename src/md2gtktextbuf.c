@@ -8,6 +8,7 @@
 
 typedef struct {
     GtkTextBuffer *buffer;
+    const char *img_prefix;
 } Context;
 
 struct _MdTag {
@@ -50,10 +51,12 @@ tag_apply_style(MdTag *r, const char *style)
     gtk_text_iter_forward_chars (&start_span, r->tag_start);
     gtk_text_buffer_get_end_iter (r->ctx->buffer, &end_span);
 
+    /*
     gchar *slice = gtk_text_iter_get_slice (&start_span, &end_span);
     unsigned tag_end = gtk_text_iter_get_offset (&end_span);
     g_print ("%s[%u -> %u]: %s\n", style, r->tag_start, tag_end, slice);
     g_free (slice);
+    */
 
     gtk_text_buffer_apply_tag_by_name (r->ctx->buffer, style, &start_span, &end_span);
 }
@@ -164,7 +167,7 @@ enter_block_callback(MD_BLOCKTYPE type, void* detail, void* userdata)
         //case MD_BLOCK_LI:       render_open_li_block(r, (const MD_BLOCK_LI_DETAIL*)detail); break;
         //case MD_BLOCK_HR:       insert_text_all(r, "<hr>\n"); break;
         //case MD_BLOCK_CODE:     render_open_code_block(r, (const MD_BLOCK_CODE_DETAIL*) detail); break;
-        case MD_BLOCK_P:        insert_text_all(r, "\n"); g_print ("P start\n"); break;
+        case MD_BLOCK_P:        insert_text_all(r, "\n"); break;
         default:                break;
     }
 
@@ -184,7 +187,7 @@ leave_block_callback(MD_BLOCKTYPE type, void* detail, void* userdata)
         //case MD_BLOCK_LI:       insert_text_all(r, "</li>\n"); break;
         //case MD_BLOCK_HR:       /*noop*/ break;
         //case MD_BLOCK_CODE:     insert_text_all(r, "</code></pre>\n"); break;
-        case MD_BLOCK_P:        insert_text_all(r, "\n\n"); g_print ("P end\n"); break;
+        case MD_BLOCK_P:        insert_text_all(r, "\n\n"); break;
         case MD_BLOCK_H:        tag_apply_style (r,
                                     head[((MD_BLOCK_H_DETAIL*)detail)->level - 1]);
                                     insert_text_all (r, "\n");
@@ -235,13 +238,15 @@ error_load_file:
 }
 
 static void
-render_image (MdTag *r, char *image_text, char *image_path)
+render_image (MdTag *r, const MD_SPAN_IMG_DETAIL *detail)
 {
+    char *image_path = g_strndup (detail->src.text, detail->src.size);
+    char *full_image_path = g_build_filename (r->ctx->img_prefix, image_path, NULL);
     GdkTexture *texture;
     GtkTextIter iter;
     GError *err = NULL;
 
-    texture = load_texture_from_file (image_path, &err);
+    texture = load_texture_from_file (full_image_path, &err);
     if (err != NULL) {
         g_printerr ("Failed to load image: %s\n", err->message);
         return;
@@ -249,6 +254,8 @@ render_image (MdTag *r, char *image_text, char *image_path)
 
     gtk_text_buffer_get_end_iter (r->ctx->buffer, &iter);
     gtk_text_buffer_insert_paintable (r->ctx->buffer, &iter, GDK_PAINTABLE (texture));
+    g_free (full_image_path);
+    g_free (image_path);
 }
 
 static int
@@ -263,7 +270,7 @@ leave_span_callback(MD_SPANTYPE type, void* detail, void* userdata)
         //case MD_SPAN_A:                 insert_text_all(r, "</a>"); break;
         //case MD_SPAN_DEL:               insert_text_all(r, "</del>"); break;
         //case MD_SPAN_CODE:              insert_text_all(r, "</code>"); break;
-        case MD_SPAN_IMG:       render_image(r, "image", "/home/johan/IMG20210521082058.jpg");
+        case MD_SPAN_IMG:       render_image(r, (MD_SPAN_IMG_DETAIL*) detail);
                                 r->image_nesting_level--; break;
         default:                break;
     }
@@ -343,10 +350,11 @@ create_styles (GtkTextBuffer *buffer)
 }
 
 GtkTextBuffer *
-md2textbuffer(const char* input)
+md2textbuffer(const char* input, const char *img_prefix)
 {
     Context ctx;
     ctx.buffer = gtk_text_buffer_new (NULL);
+    ctx.img_prefix = img_prefix;
 
     MdTag render = { &ctx, 0, 0, 0, { 0 } };
 
