@@ -9,7 +9,6 @@ md2gtktextbuf_deps = [
   md4c_dep
 ]
 
-
 md2gtktextbuf = shared_library(
   'md2gtktextbuf',
   md2gtktextbuf_src,
@@ -18,3 +17,7 @@ md2gtktextbuf = shared_library(
   soversion: meson.project_version(),
 )
 
+pkg.generate(libraries: [md2gtktextbuf] + md2gtktextbuf_deps,
+             version: meson.project_version(),
+             name: 'md2gtktextbuf',
+             description : 'A simple library that converts markdown to a GtkTextBuffer')
