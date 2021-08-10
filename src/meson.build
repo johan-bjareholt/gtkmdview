@@ -1,5 +1,5 @@
 md2gtktextbuf_src = [
-  'md2gtktextbuf.c',
+  'mdview_internal.c',
   'gtkmdview.c',
   'entity.c',
 ]
@@ -17,7 +17,7 @@ md2gtktextbuf = shared_library(
   soversion: meson.project_version(),
 )
 
-install_headers(['md2gtktextbuf.h', 'gtkmdview.h'])
+install_headers(['gtkmdview.h'])
 
 pkg.generate(libraries: [md2gtktextbuf] + md2gtktextbuf_deps,
              version: meson.project_version(),

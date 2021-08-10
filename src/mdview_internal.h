@@ -3,6 +3,6 @@
 
 #include <gtk/gtk.h>
 
-GtkTextBuffer * md2textbuffer(const char* input, const char *img_prefix);
+GtkWidget * mdview_internal_new (const char* input, const char *img_prefix);
 
 #endif /* __MD2TEXTVIEW__ */

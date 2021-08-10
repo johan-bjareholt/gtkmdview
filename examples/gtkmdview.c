@@ -40,14 +40,23 @@ activate (GtkApplication *app,
           gpointer        user_data)
 {
   GtkWidget *window = NULL;
-  GtkWidget *md_view = NULL;
   GtkWidget *scrolled_window = NULL;
+  GtkWidget *viewport = NULL;
+  GtkWidget *md_view = NULL;
 
   md_view = gtk_md_view_new (example_input, "/home/johan/");
 
+  /* setting vscroll-policy is necessary for GtkPicture to adapt its size
+   * properly inside a GtkScrolledWindow*/
+  viewport = gtk_viewport_new (NULL, NULL);
+  g_object_set (GTK_VIEWPORT (viewport), "vscroll-policy", GTK_SCROLL_NATURAL, NULL);
+  gtk_viewport_set_child (GTK_VIEWPORT (viewport), md_view);
+
   scrolled_window = gtk_scrolled_window_new ();
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+          GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window),
-      md_view);
+      viewport);
 
   window = gtk_application_window_new (app);
   gtk_window_set_title (GTK_WINDOW (window), "md4c-gtk4 demo");
