@@ -6,7 +6,7 @@ example_deps = [
 executable(
   'gtkmdview_example',
   'gtkmdview.c',
-  link_with: md2gtktextbuf,
+  link_with: gtkmdview,
   dependencies: example_deps,
   install: false,
   gui_app: true,

@@ -1,5 +1,5 @@
-project('md4c-gtk4', 'c',
-  version: '0.1',
+project('gtkmdview', 'c',
+  version: '4.0',
   meson_version: '>=0.49',
   warning_level: 2)
 

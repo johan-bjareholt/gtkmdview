@@ -3,7 +3,7 @@
 
 #include <md4c.h>
 
-#include "md2gtktextbuf.h"
+#include "gtkmdview.h"
 #include "entity.h"
 
 typedef struct _MdSpan {
