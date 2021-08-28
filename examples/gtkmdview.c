@@ -1,7 +1,8 @@
 #include <glib.h>
 #include "../src/gtkmdview.h"
 
-char * example_input = "# Heading 1\n\
+char * example_input = "\
+# Heading 1\n\
 This is a paragraph. Testing testing 123\n\
 test\n\
 ## Heading 2\n\
