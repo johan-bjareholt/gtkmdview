@@ -275,6 +275,7 @@ leave_block_callback(MD_BLOCKTYPE type, void* detail, void* userdata)
         text = gtk_text_view_new_with_buffer (ctx->buffer);
         g_object_set (text, "editable", FALSE, NULL);
         g_object_set (text, "wrap-mode", GTK_WRAP_WORD, NULL);
+        g_object_set (text, "hexpand", TRUE, NULL);
 
         gtk_box_append (GTK_BOX (ctx->box), text);
         ctx->buffer = NULL;
