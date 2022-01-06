@@ -304,7 +304,7 @@ leave_block_callback(MD_BLOCKTYPE type, void* detail, void* userdata)
             gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), picture, -1);
         }
         gtk_box_append (ctx->box, flowbox);
-        g_list_free (ctx->block->images);
+        g_list_free_full (ctx->block->images, g_free);
         ctx->block->images = NULL;
     }
 

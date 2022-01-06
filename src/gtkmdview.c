@@ -91,6 +91,17 @@ gtk_md_view_constructed (GObject *obj)
 }
 
 static void
+gtk_md_view_finalize (GObject *obj)
+{
+  GtkMdView *self = GTK_MD_VIEW (obj);
+
+  g_free (self->md_input);
+  g_free (self->img_prefix);
+
+  G_OBJECT_CLASS(parent_class)->finalize (obj);
+}
+
+static void
 gtk_md_view_dispose (GObject *obj)
 {
   GtkMdView *self = GTK_MD_VIEW (obj);
@@ -115,6 +126,7 @@ gtk_md_view_class_init (GtkMdViewClass *klass)
   object_class->get_property = gtk_md_view_get_property;
   object_class->constructed = gtk_md_view_constructed;
   object_class->dispose = gtk_md_view_dispose;
+  object_class->finalize = gtk_md_view_finalize;
 
   obj_properties[PROP_MD_INPUT] =
     g_param_spec_string ("md-input",
