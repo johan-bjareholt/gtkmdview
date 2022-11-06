@@ -1,7 +1,7 @@
 project('gtkmdview', 'c',
   version: '4.0',
   meson_version: '>=0.49',
-  default_options: ['warning_level=2'])
+  default_options: ['warning_level=1', 'werror=true'])
 
 gnome = import('gnome')
 pkg = import('pkgconfig')
