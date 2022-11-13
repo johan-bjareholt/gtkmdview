@@ -1,7 +1,12 @@
 gtkmdview_src = [
-  'mdview_internal.c',
   'gtkmdview.c',
+  'gtkmdedit.c',
+  'gtkmdpicture.c',
+  'mdview_render.c',
+  'mdedit_render.c',
+  'mdedit_serializer.c',
   'entity.c',
+  'textbuffer_utils.c',
 ]
 
 gtkmdview_deps = [
